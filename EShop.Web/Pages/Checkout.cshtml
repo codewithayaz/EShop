@@ -1,0 +1,94 @@
+﻿@page
+@model CheckoutModel
+@{
+    ViewData["PageHeader"] = Tuple.Create("Shopping Cart", "");
+}
+<form method="post">
+
+    @for (int i = 0; i < Model.CartItems.Count; i++)
+    {
+        <div class="callout callout-info">
+            <input type="hidden" asp-for="CartItems[i].ProductId" />
+            <div class="d-flex align-items-center">
+                <div class="col-1">
+                    <img src="/images/smarthr.png" alt="Product Image" style="opacity: .8; height:100px;">
+                </div>
+                <div class="col-1 mr-auto">
+                    <h5>@Model.CartItems[i].Product.Name</h5>
+                    <small>@Model.CartItems[i].Product.Description</small>
+                </div>
+                <div class="pt-2">
+                    <h6>
+                        <strong>
+                            @if (Model.CartItems[i].Product.Discount > 0)
+                            {
+                                <del>@Model.CartItems[i].Product.Price</del> <ins>@(Model.CartItems[i].Product.Price-Model.CartItems[i].Product.Discount)</ins>
+                            }
+                            else
+                            {
+                                @Model.CartItems[i].Product.Price
+                            }
+                            <span class="text-muted">x</span>
+                        </strong>
+                    </h6>
+                </div>
+                <div class="col-1">
+                    <input asp-for="CartItems[i].Quantity" class="form-control form-control-sm">
+                </div>
+
+                <div class="col-1">
+                    <button type="button" class="btn btn-outline-dark btn-sm btnRemoveFromCart" data-id="@Model.CartItems[i].ProductId">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.CartItems.All(x => x.Quantity > 0))
+    {
+        <div class="callout callout-warning">
+            <h4 class="text-right">
+                Total
+                <strong>
+                    @if (Model.TotalDiscount > 0)
+                    {
+                        <del>@Model.TotalAmount</del> <ins>@(Model.TotalAmount-Model.TotalDiscount)</ins>
+                    }
+                    else
+                    {
+                        @Model.TotalAmount
+                    }
+
+                </strong>
+            </h4>
+        </div>
+    }
+    else
+    {
+        <div class="text-danger validation-summary-errors" data-valmsg-summary="true">
+            <ul>
+                <li>The field Quantity must be between 1 and 10.</li>
+            </ul>
+        </div>
+    }
+
+    <div class="callout callout-success">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col-sm-6">
+                <strong>Added Items?</strong>
+                <button type="submit" class="btn btn-outline-info btn-sm w-25">Update Cart</button>
+            </div>
+            <div class="col-sm-6 text-right">
+                <a  asp-area="" asp-page="/Invoice/Detail" class="btn btn-outline-success btn-sm w-25">Checkout</a>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+
+
+@section Scripts {
+    <script src="~/app/cart.js" asp-append-version="true"></script>
+}

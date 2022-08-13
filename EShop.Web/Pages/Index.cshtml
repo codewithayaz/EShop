@@ -1,0 +1,107 @@
+﻿@page
+@model IndexModel
+@inject IAuthorizationService AuthorizationService
+@{
+    ViewData["PageHeader"] = Tuple.Create("Shopping Products", "");
+}
+
+<form id="frm_filter" asp-page-handler="UpdateFilter" method="post">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Categories:</label>
+                        <select asp-for="SelectedCategories" asp-items="ViewBag.CategoryList" class="select2 w-100" data-placeholder="Any"></select>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>Order By:</label>
+                        <select asp-for="OrderBy" class="select2" style="width: 100%;">
+                            <option value="Price" selected>Price</option>
+                            <option value="Name">Name</option>
+                            <option value="Date">Date</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>Sort Order:</label>
+                        <select asp-for="SortBy" class="select2" style="width: 100%;">
+                            <option value="1" selected>ASC</option>
+                            <option value="2">DESC</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="input-group input-group-lg">
+                    <input asp-for="Search" type="search" class="form-control form-control-lg" placeholder="Search products">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-lg btn-default">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@if (Model.Categories.Count == 0)
+{
+    <h4 class="mb-2 mt-4 text-center text-warning">No product found</h4>
+}
+@foreach (var category in Model.Categories)
+{
+    <h4 class="mb-2 mt-4">@category.Name</h4>
+    <div class="row">
+        @foreach (var product in category.Products)
+        {
+            <div class="col-md-4">
+                @if (product.Promotion != null)
+                {
+                    <div class="ribbon-wrapper ribbon-xl">
+                        <div class="ribbon bg-danger text-lg">
+                            @product.Promotion.DiscountPercent % (@product.Discount) Off
+                        </div>
+                    </div>
+                }
+                <div class="card card-outline card-warning">
+                    <div class="card-body mx-auto">
+                        <img src="~/images/smarthr.png" alt="Product Image" style="opacity: .8; height:200px;">
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h5>@product.Name</h5>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                @if (product.Discount > 0)
+                                {
+                                    <p>Price: <del>@product.Price</del> <ins>@(product.Price-product.Discount)</ins></p>
+
+                                }
+                                else
+                                {
+                                    <p>Price: @product.Price</p>
+                                }
+
+                            </div>
+                        </div>
+                        @if ((AuthorizationService.AuthorizeAsync(User, Policies.IsCustomer)).Result.Succeeded)
+                        {
+                            <button class="btn btn-block btn-outline-dark btn-sm addToCart mt-2" data-id="@product.Id">Add To Cart</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+
+@section Scripts {
+    <script src="~/app/cart.js" asp-append-version="true"></script>
+}

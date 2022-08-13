@@ -1,0 +1,61 @@
+﻿@page
+@model EShop.Web.Areas.Catalog.Pages.Product.EditModel
+
+@{
+    ViewData["PageHeader"] = Tuple.Create("Edit Product", "");
+}
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Product Information</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 border-right">
+                            <input type="hidden" asp-for="Entity.Id" />
+                            <div class="form-group">
+                                <label asp-for="Entity.CategoryId" class="control-label"></label>
+                                <select class="form-control" asp-for="Entity.CategoryId" asp-items="Model.Categories">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Entity.Name" class="control-label"></label>
+                                <input asp-for="Entity.Name" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Entity.Description" class="control-label"></label>
+                                <textarea asp-for="Entity.Description" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Entity.Price" class="control-label"></label>
+                                <input asp-for="Entity.Price" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="float-right">
+                        <a asp-page="Index" class="btn btn-outline-danger">Cancel</a>
+                        <input type="submit" value="Update" class="btn btn-outline-info" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

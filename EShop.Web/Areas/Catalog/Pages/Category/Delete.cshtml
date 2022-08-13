@@ -1,0 +1,53 @@
+﻿@page
+@model EShop.Web.Areas.Catalog.Pages.Category.DeleteModel
+
+@{
+    ViewData["PageHeader"] = Tuple.Create("Delete Category", "");
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Category Information</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <h3>Are you sure you want to delete this?</h3>
+                <dl class="row">
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Entity.Name)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Entity.Name)
+                    </dd>
+                </dl>
+                <dl class="row">
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Entity.Description)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Entity.Description)
+                    </dd>
+                </dl>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="float-right">
+                    <form method="post">
+                        <input type="hidden" asp-for="Entity.Id" />
+                        <a asp-page="Index" class="btn btn-outline-info">No</a>
+                        <input type="submit" value="Yes" class="btn btn-outline-warning" />
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

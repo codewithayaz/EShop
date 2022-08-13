@@ -1,0 +1,79 @@
+﻿@page
+@model EShop.Web.Areas.Admin.Pages.User.CreateModel
+
+@{
+    ViewData["PageHeader"] = Tuple.Create("User", "");
+}
+<form method="post">
+
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title">User Information</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-sm-6 border-right">
+                    <div class="form-group">
+                        <label asp-for="Entity.Email" class="control-label"></label>
+                        <input asp-for="Entity.Email" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Entity.FirstName" class="control-label"></label>
+                        <input asp-for="Entity.FirstName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Entity.LastName" class="control-label"></label>
+                        <input asp-for="Entity.LastName" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card card-widget widget-user-2">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-warning">
+                            <h3 class="widget-user-username ml-0">Roles</h3>
+                        </div>
+                        <div class="card-footer p-0">
+                            <ul class="nav flex-column">
+                                @for (int i = 0; i < Model.Entity.Roles.Count; i++)
+                                {
+                                    <li class="nav-item m-1 ml-3">
+                                        <input asp-for="@Model.Entity.Roles[i].Name" hidden />
+
+                                        <div class="checkbox">
+                                            <label asp-for="@Model.Entity.Roles[i].IsSelected" class="text-muted">
+                                                <input asp-for="@Model.Entity.Roles[i].IsSelected" />
+                                                @Model.Entity.Roles[i].Name
+                                            </label>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="float-right">
+                <a asp-page="Index" class="btn btn-outline-danger">Back to List</a>
+                <input type="submit" value="Create" class="btn btn-outline-info" />
+            </div>
+        </div>
+    </div>
+
+</form>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

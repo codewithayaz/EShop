@@ -1,0 +1,124 @@
+﻿@page
+@model EShop.Web.Areas.Admin.Pages.User.UserModel
+@inject IAuthorizationService AuthorizationService
+
+@{
+    ViewData["PageHeader"] = Tuple.Create("Users", "");
+}
+
+<div class="card card-outline card-warning">
+    <div class="card-header">
+        <form>
+            <div class="row">
+                <div class="col-sm-3 d-inline-flex">
+                    <label class="col-form-label col-sm-6">Page Size:</label>
+                    <select class="form-control form-control-sm col-sm-6" asp-for="PageSize" asp-items="Model.PageSizeList" onchange="submit()">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group input-group-sm">
+                        <input asp-for="Search" class="form-control float-right" placeholder="Search" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5 text-right">
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.User.Create)).Result.Succeeded)
+                    {
+                        <a asp-page="Create" type="button" class="btn btn-tool"><i class="fas fa-plus"></i></a>
+                    }
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body p-0">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-SortField="Email"
+                           asp-route-SortDir="@Model.SortDir"
+                           asp-route-SortDirNext="@Model.SortDirNext"
+                           asp-route-PageSize="@Model.PageSize"
+                           asp-route-PageNumber="@Model.PageNumber">
+                            Email
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-SortField="FirstName"
+                           asp-route-SortDir="@Model.SortDir"
+                           asp-route-SortDirNext="@Model.SortDirNext"
+                           asp-route-PageSize="@Model.PageSize"
+                           asp-route-PageNumber="@Model.PageNumber">
+                            First Name
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-page="./Index"
+                           asp-route-SortField="LastName"
+                           asp-route-SortDir="@Model.SortDir"
+                           asp-route-SortDirNext="@Model.SortDirNext"
+                           asp-route-PageSize="@Model.PageSize"
+                           asp-route-PageNumber="@Model.PageNumber">
+                            Last Name
+                        </a>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaginatedResult.Data[0].TemporaryPassword)
+                    </th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PaginatedResult.Data)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TemporaryPassword)
+                        </td>
+
+                        <td class="text-right">
+                            <div class="btn-group btn-group-sm">
+                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.User.Update)).Result.Succeeded)
+                                {
+                                    <a type="button" class="btn btn-outline-info" asp-page="./Edit" asp-route-id="@item.Id">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                }
+                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.User.Delete)).Result.Succeeded)
+                                {
+                                    <a type="button" class="btn btn-outline-danger @(item.UserType== EShop.Data.Enums.UserType.SystemAdmin?"disabled":null)" asp-page="./Delete" asp-route-id="@item.Id">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                }
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+        @(await Component.InvokeAsync<PagerViewComponent>(Model.PaginatedResult))
+    </div>
+</div>

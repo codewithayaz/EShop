@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @{
+        var header = ViewData["PageHeader"] as Tuple<string, string>;
+        string title = (header == null ? "LIS" : "LIS - " + header.Item1);
+    }
+    <title>@title</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="~/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="~/plugins/toastr/toastr.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/css/adminlte.min.css">
+        <link rel="stylesheet" href="~/css/site.css">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Main Header -->
+        @await Component.InvokeAsync("Header")
+        <!-- Left side column. contains the logo and sidebar -->
+        @await Component.InvokeAsync("Sidebar")
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            @await Component.InvokeAsync("PageHeader")
+                        </div>
+                        <div class="col-sm-6">
+                            @await Component.InvokeAsync("Breadcrumb")
+                        </div>
+                    </div>
+                </div>
+                @*@await Component.InvokeAsync("PageAlert")*@
+            </section>
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Your Page Content Here -->
+                    @RenderBody()
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Main Footer -->
+        @await Component.InvokeAsync("Footer")
+
+    </div>
+
+    <!-- jQuery -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="~/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/js/adminlte.min.js"></script>
+    <script src="~/js/site.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

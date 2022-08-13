@@ -1,0 +1,64 @@
+﻿@page
+@model EShop.Web.Pages.Invoice.DetailModel
+@{
+    ViewData["PageHeader"] = Tuple.Create("Invoice Detail", "");
+}
+<form method="post">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Qty</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item.Quantity</td>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Product.Price</td>
+                    <td>@item.Product.Discount</td>
+                    <td>@item.Product.DiscountedPrice</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-sm-6">
+        </div>
+        <div class="col-sm-6">
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th style="width:50%">Total Amount:</th>
+                            <td>@Model.TotalAmount</td>
+                        </tr>
+                        <tr>
+                            <th>Promotion Discount</th>
+                            <td>@Model.TotalDiscount</td>
+                        </tr>
+                        <tr>
+                            <th>Total:</th>
+                            <td>@(Model.TotalAmount-Model.TotalDiscount)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success float-right">
+                <i class="far fa-credit-card"></i>
+                Cofirm Payment
+            </button>
+        </div>
+    </div>
+</form>

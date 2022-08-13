@@ -1,0 +1,23 @@
+﻿.btn-facebook.focus {
+    color: #fff;
+    background-color: #23345a;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.btn-facebook {
+    color: #fff;
+    background-color: #23345a;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.btn-instagram {
+    color: #fff;
+    background-color: #3f729b;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.btn-linkedin {
+    color: #fff;
+    background-color: #007bb6;
+    border-color: rgba(0,0,0,0.2);
+}

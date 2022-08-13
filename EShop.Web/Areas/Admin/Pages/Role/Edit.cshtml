@@ -1,0 +1,39 @@
+﻿@page
+@model EShop.Web.Areas.Admin.Pages.Role.EditModel
+
+@{
+    ViewData["PageHeader"] = Tuple.Create("Role Edit", "");
+}
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Role Information</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <input type="hidden" asp-for="Entity.Id" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Entity.Name" class="control-label"></label>
+                        <input asp-for="Entity.Name" class="form-control @(Model.Entity.IsDefault?"disabled":null)" />
+
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="float-right">
+                        <a asp-page="Index" class="btn btn-outline-danger">Cancel</a>
+                        <input type="submit" value="Update" class="btn btn-outline-info" />
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

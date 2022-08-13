@@ -1,0 +1,66 @@
+﻿@page
+@model EShop.Web.Areas.Admin.Pages.User.TopCustomersModel
+@inject IAuthorizationService AuthorizationService
+
+@{
+    ViewData["PageHeader"] = Tuple.Create("Top 10 Customers", "");
+}
+
+<div class="card card-outline card-warning">
+    <div class="card-header">
+        <form>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="control-label"></label>
+                        <input asp-for="StartDate" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label asp-for="EndDate" class="control-label"></label>
+                        <input asp-for="EndDate" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Search customer</label>
+                        <div class="input-group">
+                            <input asp-for="Search" class="form-control float-right" placeholder="Search" />
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body p-0">
+        <div class="row">
+
+
+            @foreach (var customer in Model.Customers)
+            {
+                <div class="col-md-4">
+                    <div class="card card-widget widget-user shadow">
+                        <div class="widget-user-header bg-info">
+                            <h3 class="widget-user-username">@customer.FirstName @customer.LastName</h3>
+                            <h5 class="widget-user-desc">@customer.Email</h5>
+                        </div>
+                        <div class="widget-user-image">
+                            <img class="img-circle elevation-2" src="~/images/user.png" alt="User Avatar">
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.Customers.Count == 0)
+            {
+                <div class="col-sm-12 text-center">
+                    <h4 class="mb-2 mt-4 text-warning">No customer found</h4>
+                </div>
+            }
+        </div>
+    </div>
+</div>

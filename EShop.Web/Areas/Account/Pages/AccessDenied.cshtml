@@ -1,0 +1,17 @@
+﻿@page
+@model EShop.Web.Areas.Account.Pages.AccessDeniedModel
+@{
+    ViewData["Title"] = "Access denied";
+    Layout = "_Layout";
+}
+<div class="card">
+    <div class="card-body login-card-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="text-danger">@ViewData["Title"]</h1>
+                <p class="text-danger">You do not have access to this resource.</p>
+            </div>
+        </div>
+    </div>
+    <!-- /.login-card-body -->
+</div>

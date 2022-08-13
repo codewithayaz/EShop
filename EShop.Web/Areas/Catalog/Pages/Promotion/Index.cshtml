@@ -1,0 +1,165 @@
+﻿@page
+@model EShop.Web.Areas.Catalog.Pages.Promotion.ListModel
+@inject IAuthorizationService AuthorizationService
+
+@{
+    ViewData["PageHeader"] = Tuple.Create("Promotions", "");
+}
+
+<div class="card card-outline card-warning">
+    <div class="card-header">
+        <form>
+            <div class="row">
+                <div class="col-sm-3 d-inline-flex">
+                    <label class="col-form-label col-sm-6">Page Size:</label>
+                    <select class="form-control form-control-sm col-sm-6" asp-for="PageSize" asp-items="Model.PageSizeList" onchange="submit()">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group input-group-sm">
+                        <input asp-for="Search" class="form-control float-right" placeholder="Search" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5 text-right">
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Category.Create)).Result.Succeeded)
+                    {
+                        <a asp-page="Create" type="button" class="btn btn-tool"><i class="fas fa-plus"></i></a>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-SortField="Name"
+                           asp-route-SortDir="@Model.SortDir"
+                           asp-route-SortDirNext="@Model.SortDirNext"
+                           asp-route-PageSize="@Model.PageSize"
+                           asp-route-PageNumber="@Model.PageNumber">
+                            Name
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-SortField="StartDate"
+                           asp-route-SortDir="@Model.SortDir"
+                           asp-route-SortDirNext="@Model.SortDirNext"
+                           asp-route-PageSize="@Model.PageSize"
+                           asp-route-PageNumber="@Model.PageNumber">
+                            Start Date
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-SortField="EndDate"
+                           asp-route-SortDir="@Model.SortDir"
+                           asp-route-SortDirNext="@Model.SortDirNext"
+                           asp-route-PageSize="@Model.PageSize"
+                           asp-route-PageNumber="@Model.PageNumber">
+                            EndDate
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-SortField="DiscountPercent"
+                           asp-route-SortDir="@Model.SortDir"
+                           asp-route-SortDirNext="@Model.SortDirNext"
+                           asp-route-PageSize="@Model.PageSize"
+                           asp-route-PageNumber="@Model.PageNumber">
+                            Discount Percentage
+                        </a>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaginatedResult.Data[0].IsActive)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PaginatedResult.Data)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EndDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DiscountPercent)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActive)
+                        </td>
+                        <td class="text-right">
+                            <div class="btn-group btn-group-sm">
+                                @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.Promotion.Update)).Succeeded)
+                                {
+                                    <a type="button" class="btn btn-outline-info" asp-page="./Edit" asp-route-id="@item.Id">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                }
+                                @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.Promotion.Manage)).Succeeded)
+                                {
+                                    <a type="button" class="btn btn-outline-warning" asp-page="./Manage" asp-route-id="@item.Id">
+                                        <i class="fas fa-tasks"></i>
+                                    </a>
+                                }
+                                @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.Promotion.Delete)).Succeeded)
+                                {
+                                    <a type="button" class="btn btn-outline-danger" asp-page="./Delete" asp-route-id="@item.Id">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                }
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+        @(await Component.InvokeAsync<PagerViewComponent>(Model.PaginatedResult))
+    </div>
+</div>
+
+<script>
+    $(function() {
+        //$("#jsGrid1").jsGrid({
+        //    height: "100%",
+        //    width: "100%",
+
+        //    sorting: true,
+        //    paging: true,
+
+        //    data: db.clients,
+
+        //    fields: [
+        //        { name: "Name", type: "text", width: 150 },
+        //        { name: "Age", type: "number", width: 50 },
+        //        { name: "Address", type: "text", width: 200 },
+        //        { name: "Country", type: "select", items: db.countries, valueField: "Id", textField: "Name" },
+        //        { name: "Married", type: "checkbox", title: "Is Married" }
+        //    ]
+        //});
+    });
+</script>

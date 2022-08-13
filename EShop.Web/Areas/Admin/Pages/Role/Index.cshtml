@@ -1,0 +1,95 @@
+﻿@page
+@model EShop.Web.Areas.Admin.Pages.Role.RoleModel
+@inject IAuthorizationService AuthorizationService
+
+@{
+    ViewData["PageHeader"] = Tuple.Create("Roles", "");
+}
+
+<div class="card card-outline card-warning">
+    <div class="card-header">
+        <form>
+            <div class="row">
+                <div class="col-sm-3 d-inline-flex">
+                    <label class="col-form-label col-sm-6">Page Size:</label>
+                    <select class="form-control form-control-sm col-sm-6" asp-for="PageSize" asp-items="Model.PageSizeList" onchange="submit()">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="col-sm-4 mt-1">
+                    <div class="input-group input-group-sm">
+                        <input asp-for="Search" class="form-control float-right" placeholder="Search" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5 text-right">
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Role.Create)).Result.Succeeded)
+                    {
+                        <a asp-page="Create" type="button" class="btn btn-tool"><i class="fas fa-plus"></i></a>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-SortField="Name"
+                           asp-route-SortDir="@Model.SortDir"
+                           asp-route-SortDirNext="@Model.SortDirNext"
+                           asp-route-PageSize="@Model.PageSize"
+                           asp-route-PageNumber="@Model.PageNumber">
+                            Name
+                        </a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PaginatedResult.Data)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td class="text-right">
+                            <div class="btn-group btn-group-sm">
+                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Role.Update)).Result.Succeeded)
+                                {
+                                    <a type="button" class="btn btn-outline-info" asp-page="./Edit" asp-route-id="@item.Id">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                }
+                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Role.Manage)).Result.Succeeded)
+                                {
+                                    <a type="button" class="btn btn-outline-warning" asp-page="./ManagePermissions" asp-route-id="@item.Id">
+                                        <i class="fas fa-tasks"></i>
+                                    </a>
+                                }
+                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Role.Delete)).Result.Succeeded)
+                                {
+                                    <a type="button" class="btn btn-outline-danger @(item.IsDefault?"disabled":null)" asp-page="./Delete" asp-route-id="@item.Id">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                }
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+        @(await Component.InvokeAsync<PagerViewComponent>(Model.PaginatedResult))
+    </div>
+</div>
