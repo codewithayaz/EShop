@@ -10,6 +10,7 @@ namespace EShop.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
         public DbSet<UserAudit> UserAuditEvents { get; set; }
@@ -21,7 +22,6 @@ namespace EShop.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
 
             modelBuilder.ApplyConfiguration(new ProductPromotionConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());

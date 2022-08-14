@@ -7,6 +7,7 @@ using EShop.Data.Interfaces;
 using EShop.Web.Areas.Catalog.Pages.Promotion;
 using EShop.Web.Authorization;
 using EShop.Web.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Web.Areas.Customer.Pages.Invoice
 {
@@ -29,21 +30,46 @@ namespace EShop.Web.Areas.Customer.Pages.Invoice
         public void OnGet()
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            LoadData(userId);
+
+            var cartItems = _unitOfWork.CartItemRepository.Get(x => x.UserId == userId, includeProperties: "Product,Product.ProductPromotions.Promotion").ToList();
+            CartItems = _mapper.Map<List<CartItemVM>>(cartItems);
+            DateTime now = DateTime.Now.Date;
+            foreach (var item in CartItems)
+            {
+                var dbPromotion = cartItems.First(x => x.ProductId == item.ProductId).Product
+                    .ProductPromotions.FirstOrDefault(x => x.Promotion.StartDate.Date <= now && x.Promotion.EndDate >= now)?.Promotion;
+                item.Product.Promotion = _mapper.Map<PromotionVM>(dbPromotion);
+            }
+
+            TotalAmount = CartItems.Sum(x => x.Quantity * x.Product.Price);
+            TotalDiscount = CartItems.Sum(x => x.Product.Discount);
         }
 
         public IActionResult OnPost()
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            LoadData(userId);
-            DateTime now = DateTime.Now;
+
+            var cartItems = _unitOfWork.CartItemRepository.Get(x => x.UserId == userId, includeProperties: "Product,Product.ProductPromotions.Promotion").ToList();
+            
+            CartItems = _mapper.Map<List<CartItemVM>>(cartItems);
+            DateTime now = DateTime.Now.Date;
+            foreach (var item in CartItems)
+            {
+                var dbPromotion = cartItems.First(x => x.ProductId == item.ProductId).Product
+                    .ProductPromotions.FirstOrDefault(x => x.Promotion.StartDate.Date <= now && x.Promotion.EndDate >= now)?.Promotion;
+                item.Product.Promotion = _mapper.Map<PromotionVM>(dbPromotion);
+            }
+
+            TotalAmount = CartItems.Sum(x => x.Quantity * x.Product.Price);
+            TotalDiscount = CartItems.Sum(x => x.Product.Discount);
+            
             var invoice = new Data.Entities.Invoice()
             {
                 CreatedDate = DateTime.Now,
                 ModifiedDate = null,
                 UserId = userId
             };
-            
+
             invoice.InvoiceDetails = CartItems.Select(x => new Data.Entities.InvoiceDetail
             {
                 CreatedDate = now,
@@ -57,29 +83,15 @@ namespace EShop.Web.Areas.Customer.Pages.Invoice
             }).ToList();
 
             _unitOfWork.InvoiceRepository.Insert(invoice);
-
-            var cartItems = _unitOfWork.CartItemRepository.Get(x => x.UserId == userId, includeProperties: "Product,Product.ProductPromotions.Promotion").ToList();
+            
+            cartItems = _unitOfWork.CartItemRepository.Get(x => x.UserId == userId).ToList();
             foreach (var item in cartItems)
             {
                 _unitOfWork.CartItemRepository.Delete(item);
             }
             _unitOfWork.Save();
-            return RedirectToPage("../Index");
-        }
-        private void LoadData(string userId)
-        {
-            var cartItems = _unitOfWork.CartItemRepository.Get(x => x.UserId == userId, includeProperties: "Product,Product.ProductPromotions.Promotion").ToList();
-            CartItems = _mapper.Map<List<CartItemVM>>(cartItems);
-            DateTime now = DateTime.Now.Date;
-            foreach (var item in CartItems)
-            {
-                var dbPromotion = cartItems.First(x => x.ProductId == item.ProductId).Product
-                    .ProductPromotions.FirstOrDefault(x => x.Promotion.StartDate.Date <= now && x.Promotion.EndDate >= now)?.Promotion;
-                item.Product.Promotion = _mapper.Map<PromotionVM>(dbPromotion);
-            }
 
-            TotalAmount = CartItems.Sum(x => x.Quantity * x.Product.Price);
-            TotalDiscount = CartItems.Sum(x => x.Product.Discount);
+            return RedirectToPage("./Index");
         }
     }
 }

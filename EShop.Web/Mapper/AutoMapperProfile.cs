@@ -7,6 +7,7 @@ using EShop.Web.Areas.Catalog.Pages.Category;
 using EShop.Web.Areas.Catalog.Pages.Product;
 using EShop.Web.Areas.Catalog.Pages.Promotion;
 using EShop.Web.Models;
+using EShop.Web.Areas.Customer.Pages.Invoice;
 
 namespace EShop.Web.Mapper
 {
@@ -23,6 +24,8 @@ namespace EShop.Web.Mapper
             CreateMap<Product, ProductVM>().ReverseMap();
             CreateMap<Promotion, PromotionVM>().ReverseMap();
             CreateMap<CartItem, CartItemVM>().ReverseMap();
+            CreateMap<Invoice, InvoiceVM>().ReverseMap();
+            CreateMap<InvoiceDetail, InvoiceDetailVM>().ReverseMap();
 
         }
     }

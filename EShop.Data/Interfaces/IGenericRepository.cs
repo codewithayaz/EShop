@@ -16,6 +16,5 @@ namespace EShop.Data.Interfaces
         void Delete(int id);
         void Delete(TEntity entityToDelete);
         bool Any(Expression<Func<TEntity, bool>> filter);
-        
     }
 }

@@ -1,0 +1,53 @@
+﻿@page
+@model EShop.Web.Areas.Customer.Pages.Invoice.DetailsModel
+@{
+    ViewData["PageHeader"] = Tuple.Create("Invoice Detail", "");
+}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Qty</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Entity.InvoiceDetails)
+        {
+            <tr>
+                <td>@item.Quantity</td>
+                <td>@item.Product.Name</td>
+                <td>@item.Product.Price</td>
+                <td>@item.Product.Discount</td>
+                <td>@item.Product.DiscountedPrice</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-sm-6">
+    </div>
+    <div class="col-sm-6">
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th style="width:50%">Total Amount:</th>
+                        <td>@Model.TotalAmount</td>
+                    </tr>
+                    <tr>
+                        <th>Promotion Discount</th>
+                        <td>@Model.TotalDiscount</td>
+                    </tr>
+                    <tr>
+                        <th>Total:</th>
+                        <td>@(Model.TotalAmount - Model.TotalDiscount)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
