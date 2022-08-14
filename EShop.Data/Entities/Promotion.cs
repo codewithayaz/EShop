@@ -26,6 +26,7 @@ namespace EShop.Data.Entities
         [Column(TypeName = "datetime")]
         public DateTime? ModifiedDate { get; set; }
         public bool IsActive { get; set; }
+        public ICollection<InvoiceDetail> InvoiceDetails { get; set; }
         public ICollection<ProductPromotion> ProductPromotions { get; set; }
     }
 }

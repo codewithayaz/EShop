@@ -46,7 +46,7 @@ namespace EShop.Web.Pages
                 }
             }
             HttpContext.Session.SetString("Categories", JsonConvert.SerializeObject(Categories));
-            
+
             ViewData["CategoryList"] = new SelectList(Categories, "Id", "Name");
 
             Categories = Categories.Where(x => x.Products.Count > 0).ToList();
@@ -55,7 +55,7 @@ namespace EShop.Web.Pages
         public void OnPostUpdateFilter()
         {
             var categoriesString = HttpContext.Session.GetString("Categories");
-          
+
             Categories = JsonConvert.DeserializeObject<List<CategoryVM>>(categoriesString);
             ViewData["CategoryList"] = new SelectList(Categories, "Id", "Name");
 

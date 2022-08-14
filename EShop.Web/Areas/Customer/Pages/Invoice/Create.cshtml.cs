@@ -8,15 +8,15 @@ using EShop.Web.Areas.Catalog.Pages.Promotion;
 using EShop.Web.Authorization;
 using EShop.Web.Models;
 
-namespace EShop.Web.Pages.Invoice
+namespace EShop.Web.Areas.Customer.Pages.Invoice
 {
     [Authorize(Policies.IsCustomer)]
-    public class DetailModel : PageModel
+    public class CreateModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DetailModel(IUnitOfWork unitOfWork, IMapper mapper)
+        public CreateModel(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -34,6 +34,36 @@ namespace EShop.Web.Pages.Invoice
 
         public IActionResult OnPost()
         {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            LoadData(userId);
+            DateTime now = DateTime.Now;
+            var invoice = new Data.Entities.Invoice()
+            {
+                CreatedDate = DateTime.Now,
+                ModifiedDate = null,
+                UserId = userId
+            };
+            
+            invoice.InvoiceDetails = CartItems.Select(x => new Data.Entities.InvoiceDetail
+            {
+                CreatedDate = now,
+                ModifiedDate = null,
+                Invoice = invoice,
+                ProductId = x.ProductId,
+                PromotionId = x.Product.Promotion?.Id,
+                UnitPrice = x.Product.Price,
+                PromotionDiscount = x.Product.Discount,
+                Quantity = x.Quantity
+            }).ToList();
+
+            _unitOfWork.InvoiceRepository.Insert(invoice);
+
+            var cartItems = _unitOfWork.CartItemRepository.Get(x => x.UserId == userId, includeProperties: "Product,Product.ProductPromotions.Promotion").ToList();
+            foreach (var item in cartItems)
+            {
+                _unitOfWork.CartItemRepository.Delete(item);
+            }
+            _unitOfWork.Save();
             return RedirectToPage("../Index");
         }
         private void LoadData(string userId)

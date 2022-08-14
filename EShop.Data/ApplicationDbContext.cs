@@ -26,6 +26,8 @@ namespace EShop.Data
             modelBuilder.ApplyConfiguration(new ProductPromotionConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new CartItemConfiguration());
+            modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
+
 
         }
     }

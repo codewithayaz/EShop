@@ -35,10 +35,10 @@ namespace EShop.Web.Pages
         public IActionResult OnPost()
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (CartItems.Any(x=>x.Quantity<1))
+            if (CartItems.Any(x => x.Quantity < 1))
             {
                 var items = _unitOfWork.CartItemRepository.Get(x => x.UserId == userId, includeProperties: "Product,Product.ProductPromotions").ToList();
-                
+
                 foreach (var item in items)
                 {
                     item.Quantity = CartItems.First(x => x.ProductId == item.ProductId).Quantity;
@@ -60,7 +60,7 @@ namespace EShop.Web.Pages
 
             LoadData(userId);
             return Page();
-            
+
         }
         private void LoadData(string userId)
         {

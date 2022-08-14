@@ -1,5 +1,5 @@
 ﻿@page
-@model CheckoutModel
+@model EShop.Web.Pages.CheckoutModel
 @{
     ViewData["PageHeader"] = Tuple.Create("Shopping Cart", "");
 }
@@ -22,7 +22,7 @@
                         <strong>
                             @if (Model.CartItems[i].Product.Discount > 0)
                             {
-                                <del>@Model.CartItems[i].Product.Price</del> <ins>@(Model.CartItems[i].Product.Price-Model.CartItems[i].Product.Discount)</ins>
+                                <del>@Model.CartItems[i].Product.Price</del> <ins>@(Model.CartItems[i].Product.Price - Model.CartItems[i].Product.Discount)</ins>
                             }
                             else
                             {
@@ -52,7 +52,7 @@
                 <strong>
                     @if (Model.TotalDiscount > 0)
                     {
-                        <del>@Model.TotalAmount</del> <ins>@(Model.TotalAmount-Model.TotalDiscount)</ins>
+                        <del>@Model.TotalAmount</del> <ins>@(Model.TotalAmount - Model.TotalDiscount)</ins>
                     }
                     else
                     {
@@ -71,19 +71,22 @@
             </ul>
         </div>
     }
-
-    <div class="callout callout-success">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="row">
-            <div class="col-sm-6">
-                <strong>Added Items?</strong>
-                <button type="submit" class="btn btn-outline-info btn-sm w-25">Update Cart</button>
-            </div>
-            <div class="col-sm-6 text-right">
-                <a  asp-area="" asp-page="/Invoice/Detail" class="btn btn-outline-success btn-sm w-25">Checkout</a>
+    @if (Model.CartItems.Count > 0)
+    {
+        <div class="callout callout-success">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <strong>Added Items?</strong>
+                    <button type="submit" class="btn btn-outline-info btn-sm w-25">Update Cart</button>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a asp-area="Customer" asp-page="/Invoice/Create" class="btn btn-outline-success btn-sm w-25">Checkout</a>
+                </div>
             </div>
         </div>
-    </div>
+    }
+
 
 </form>
 

@@ -10,6 +10,9 @@ namespace EShop.Data.Interfaces
         IGenericRepository<Promotion> PromotionRepository { get; }
         IGenericRepository<ProductPromotion> ProductPromotionRepository { get; }
         IGenericRepository<CartItem> CartItemRepository { get; }
+        IGenericRepository<Invoice> InvoiceRepository { get; }
+        IGenericRepository<InvoiceDetail> InvoiceDetailRepository { get; }
+
         ApplicationDbContext ApplicationDbContext { get; }
         void Dispose();
         void Save();

@@ -14,5 +14,6 @@ namespace EShop.Data.Entities
         public UserType UserType { get; set; }
 
         public ICollection<CartItem> CartItems { get; set; }
+        public ICollection<Invoice> Invoices { get; set; }
     }
 }

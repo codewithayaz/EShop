@@ -10,7 +10,7 @@ namespace EShop.Data.Entities
         [MaxLength(50)]
         public string Name { get; set; } = "";
         public string? Description { get; set; }
-        [Range(0, 1000000000000), DataType("decimal(18,2)")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedDate { get; set; }
@@ -21,5 +21,6 @@ namespace EShop.Data.Entities
         public Category Category { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
         public ICollection<ProductPromotion> ProductPromotions { get; set; }
+        public ICollection<InvoiceDetail> InvoiceDetails { get; set; }
     }
 }

@@ -4,15 +4,16 @@ using EShop.Data.Interfaces;
 
 namespace EShop.Data.Entities
 {
-    public class CartItem : IEntity
+    public class Invoice : IEntity
     {
+        public int Id { get; set; }
         public string UserId { get; set; }
-        public int ProductId { get; set; }
-        [Range(1, int.MaxValue)]
-        public int Quantity { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedDate { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? ModifiedDate { get; set; }
         public ApplicationUser User { get; set; }
-        public Product Product { get; set; }
+        public ICollection<InvoiceDetail> InvoiceDetails { get; set; }
+
     }
 }

@@ -37,6 +37,12 @@ namespace EShop.Data
         private IGenericRepository<CartItem> cartItemRepo;
         public IGenericRepository<CartItem> CartItemRepository => cartItemRepo ?? new GenericRepository<CartItem>(_context, _mapper);
 
+        private IGenericRepository<Invoice> invoiceRepo;
+        public IGenericRepository<Invoice> InvoiceRepository => invoiceRepo ?? new GenericRepository<Invoice>(_context, _mapper);
+
+        private IGenericRepository<InvoiceDetail> invoiceDetailRepo;
+        public IGenericRepository<InvoiceDetail> InvoiceDetailRepository => invoiceDetailRepo ?? new GenericRepository<InvoiceDetail>(_context, _mapper);
+
         public void Save()
         {
             _context.SaveChanges();
