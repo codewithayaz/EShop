@@ -46,7 +46,7 @@ An online shopping cart with percentage discounts on items is a crucial componen
 
 - Dynamic pricing with the ability to apply percentage discounts on selected items.
 
-### 15. Display of Savings
+### 11. Display of Savings
 
 - Clear display of the amount saved through applied percentage discounts.
 
