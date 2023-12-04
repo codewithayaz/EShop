@@ -4,6 +4,12 @@
 
 An online shopping cart with percentage discounts on items is a crucial component of e-commerce platforms, enhancing customer engagement and driving sales. Here's a summary of key features and considerations:
 
+## Key Modules
+
+#### 1. Asp.net Identify
+#### 2. Permission based authorization
+#### 3. Generic Repository
+
 ## Key Features
 
 ### 1. Product Selection
