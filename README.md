@@ -6,7 +6,7 @@ An online shopping cart with percentage discounts on items is a crucial componen
 
 ## Key Modules
 
-#### 1. Asp.net Identify
+#### 1. Asp.net Identity
 #### 2. Permission based authorization
 #### 3. Generic Repository
 
